@@ -1,0 +1,202 @@
+ScreenManager:
+    HomeScreen:
+        id: home
+
+<HomeScreen>:
+    FloatLayout:
+        canvas:
+            Color: 
+                rgba: app.color_secondary
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        MDToolbar:
+            pos_hint: {'top':1}
+            md_bg_color: app.color_secondary
+        MDLabel:
+            text: "What's up, Delali!"
+            font_style: 'H4'
+            color: app.color_white
+            pos_hint: {'top':1.35}
+            bold: True
+            padding: 30,0
+        #categories
+        MDLabel:
+            text: 'CATEGORIES'
+            color: app.color_white_transparent
+            pos_hint: {'top':1.3}
+            padding: 30,0
+
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            pos_hint:{'top':1.6}
+            spacing:20
+            padding: 30,0
+            # adaptive_width: True
+            CoolRoundCard:
+                orientation: 'vertical'
+                # bag_color: color_primary
+                size_hint: None,None
+                size: '135dp','100dp'
+                md_bg_color: 0,0,0,0
+                bag_color: app.color_primary
+                spacing: 5
+                
+                MDLabel:
+                    text: '40 tasks'
+                    padding:10,0
+                    color: app.color_white_transparent
+                MDLabel:
+                    text: 'Business'
+                    padding:10,0
+                    font_size: 20
+                    bold: True
+                    color: app.color_white
+                MDLabel:
+                    text: '________'
+                    padding:10,5
+                    font_size: 20
+                    bold: True
+                    color: app.color_pink
+
+            CoolRoundCard:
+                orientation: 'vertical'
+                # bag_color: color_primary
+                size_hint: None,None
+                size: '135dp','100dp'
+                md_bg_color: 0,0,0,0
+                bag_color: app.color_primary
+                spacing: 5
+                
+                MDLabel:
+                    text: '18 tasks'
+                    padding:10,0
+                    color: app.color_white_transparent
+                MDLabel:
+                    text: 'Personal'
+                    padding:10,0
+                    font_size: 20
+                    bold: True
+                    color: app.color_white
+                MDLabel:
+                    text: '________'
+                    padding:10,5
+                    font_size: 20
+                    bold: True
+                    color: app.color_blue
+        #Tasks
+        MDLabel:
+            text: "TODAY'S TASKS"
+            color: app.color_white_transparent
+            pos_hint: {'top':1.07}
+            padding: 30,0
+        
+        
+        ScrollView:
+            pos_hint: {'top':.54, }
+            
+            MDList: 
+                padding:30,0
+                id: tasksList
+                spacing:5
+
+                EachBusinessTask:
+                EachBusinessTask:
+                EachPersonalTask:
+                EachBusinessTask:
+                EachBusinessTask:
+                EachPersonalTask:
+                MDRaisedButton:
+                    text: 'texting'
+            
+        MDFloatingActionButton:
+            icon: 'plus'
+            specific_text_color: app.color_white
+            md_bg_color: app.color_pink
+            pos_hint: {'top':.18,'right':.9}
+            elevation_normal: 0
+            on_release: app.add_task()
+
+        
+
+<TaskAdder>:
+    orientation: 'vertical'
+    spacing:'12dp'
+    # hieght: '100dp'
+    MDTextField:
+        pos_hint: {'top':1.1}
+        hint_text: "Task"
+    BoxLayout:
+        pos_hint: {'top':.9,'center_x':.5}
+        spacing: 2
+    
+        BoxLayout:
+            CheckBtnPink:
+                group: 'categories'
+            MDLabel:
+                text: 'Business'
+            
+        BoxLayout:
+            CheckBtnBlue:
+                group: 'categories'
+                active: True
+            MDLabel:
+                text: 'Personal'
+            
+
+<CoolRoundCard@MDCard>:
+    md_bg_color: (0,0,0,0)
+    bd_radius:[10]
+    bag_color: (1,1,1,1)
+    canvas:
+        Color:
+            rgba: self.bag_color
+        RoundedRectangle:
+            size:self.size
+            pos:self.pos
+            radius: self.bd_radius
+
+
+<CheckBtnPink@MDCheckbox>:
+    size_hint: None,None
+    size: dp(48),dp(48)
+    checkbox_icon_normal: 'checkbox-blank-circle-outline'
+    checkbox_icon_down: 'checkbox-marked-circle'
+    unselected_color: app.color_pink
+    selected_color: app.color_pink
+    pos_hint: {'center_y':.5, }   
+<CheckBtnBlue@MDCheckbox>:
+    size_hint: None,None
+    size: dp(48),dp(48)
+    checkbox_icon_normal: 'checkbox-blank-circle-outline'
+    checkbox_icon_down: 'checkbox-marked-circle'
+    unselected_color: app.color_blue
+    selected_color: app.color_blue
+    pos_hint: {'center_y':.5, }   
+<EachBusinessTask@CoolRoundCard>:
+    orientation: 'horizontal'
+    size_hint: None,None
+    size: '290dp','60dp'
+    md_bg_color: 0,0,0,0
+    bag_color: app.color_primary
+    spacing: 5
+    CheckBtnPink:
+
+    MDLabel:
+        text: app.addedTodo
+        font_size: 20
+        color: app.color_white
+<EachPersonalTask@CoolRoundCard>:
+    orientation: 'horizontal'
+    size_hint: None,None
+    size: '290dp','60dp'
+    md_bg_color: 0,0,0,0
+    bag_color: app.color_primary
+    spacing: 5
+    CheckBtnBlue:
+
+    MDLabel:
+        text: app.addedTodo
+        font_size: 20
+        color: app.color_white
