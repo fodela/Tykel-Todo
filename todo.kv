@@ -1,6 +1,7 @@
 ScreenManager:
     HomeScreen:
         id: home
+        name: 'home'
 
 <HomeScreen>:
     FloatLayout:
@@ -35,6 +36,7 @@ ScreenManager:
             padding: 30,0
             # adaptive_width: True
             CoolRoundCard:
+                id: businessCategory
                 orientation: 'vertical'
                 # bag_color: color_primary
                 size_hint: None,None
@@ -61,6 +63,7 @@ ScreenManager:
                     color: app.color_pink
 
             CoolRoundCard:
+                id: personalCategory
                 orientation: 'vertical'
                 # bag_color: color_primary
                 size_hint: None,None
@@ -98,17 +101,15 @@ ScreenManager:
             
             MDList: 
                 padding:30,0
-                id: tasksList
+                id: taskList
                 spacing:5
 
-                EachBusinessTask:
-                EachBusinessTask:
-                EachPersonalTask:
-                EachBusinessTask:
-                EachBusinessTask:
-                EachPersonalTask:
-                MDRaisedButton:
-                    text: 'texting'
+                EachPersonalSwippableTask:
+                    task: 'Finish the ui design'
+                    category_color: app.color_pink
+                EachPersonalSwippableTask:
+                    task: 'go eat'
+                    category_color: app.color_blue
             
         MDFloatingActionButton:
             icon: 'plus'
@@ -116,8 +117,17 @@ ScreenManager:
             md_bg_color: app.color_pink
             pos_hint: {'top':.18,'right':.9}
             elevation_normal: 0
+            on_release: app.add_task_form()
+
+        MDFloatingActionButton:
+            icon: 'plus'
+            specific_text_color: app.color_white
+            md_bg_color: app.color_blue
+            pos_hint: {'top':.18,'right':.5}
+            elevation_normal: 0
             on_release: app.add_task()
 
+        
         
 
 <TaskAdder>:
@@ -133,12 +143,14 @@ ScreenManager:
     
         BoxLayout:
             CheckBtnPink:
+                id: business
                 group: 'categories'
             MDLabel:
                 text: 'Business'
             
         BoxLayout:
             CheckBtnBlue:
+                id: personal
                 group: 'categories'
                 active: True
             MDLabel:
@@ -157,7 +169,12 @@ ScreenManager:
             pos:self.pos
             radius: self.bd_radius
 
-
+<CheckBtn@MDCheckbox>:
+    size_hint: None,None
+    size: dp(48),dp(48)
+    checkbox_icon_normal: 'checkbox-blank-circle-outline'
+    checkbox_icon_down: 'checkbox-marked-circle'
+    pos_hint: {'center_y':.5, }   
 <CheckBtnPink@MDCheckbox>:
     size_hint: None,None
     size: dp(48),dp(48)
@@ -200,3 +217,73 @@ ScreenManager:
         text: app.addedTodo
         font_size: 20
         color: app.color_white
+
+<CoolRoundSwipeCard@MDCardSwipe>:
+    id: thisCard
+    md_bg_color: (0,0,0,0)
+    front_bg_color: 1,1,1,1
+    back_bg_color:0,0,0,1
+    size_hint: None,None
+    task: 'testing this task'
+    back_icon: 'trash-can'
+    # type_swipe: 'hand'
+    anchor: 'right'
+    category_color: app.color_pink
+    bd_radius:[10]
+    
+    MDCardSwipeLayerBox:
+        id: cardBack
+        #back roundness
+        
+        md_bg_color: (0,0,0,0)
+        canvas:
+            Color:
+                rgba: thisCard.back_bg_color
+            RoundedRectangle:
+                size:self.size
+                pos:self.pos
+                radius: thisCard.bd_radius
+    
+        md_bg_color: thisCard.back_bg_color
+        MDIconButton:
+            icon: thisCard.back_icon
+            pos_hint: {'center_y':.5}
+            on_release: app.delete_task(self.parent.parent)
+        
+
+        
+    MDCardSwipeFrontBox:
+        id: cardFront
+        #frontroundness
+        md_bg_color: (0,0,0,0)
+        canvas.before:
+            Color:
+                rgba: thisCard.front_bg_color
+            RoundedRectangle:
+                size:self.size
+                pos:self.pos
+                radius: thisCard.bd_radius
+
+        md_bg_color: thisCard.front_bg_color
+        orientation: 'horizontal'
+        spacing: 5
+        CheckBtn:
+            id: taskStatus
+            unselected_color: thisCard.category_color
+            selected_color: thisCard.category_color
+            on_active: app.task_state(self.parent.children[0])
+        MDLabel:
+            id: taskLabel
+            text: thisCard.task
+            font_size: 20
+            color: app.color_white
+            strikethrough: False
+
+        
+
+<EachPersonalSwippableTask@CoolRoundSwipeCard>:
+    front_bg_color: app.color_primary
+    back_bg_color: app.color_primary_transparent
+    size: '290dp','50dp'
+    category_color: app.color_white
+    
